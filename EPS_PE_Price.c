@@ -1,4 +1,6 @@
-#include <stdio.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define MAXPARNUM 17
 #define MAXNOTICENUM 12
 
@@ -254,18 +256,15 @@ void initInput(float input[MAXPARNUM]){
  */ 
 float lastFourQuartersTheDayForwardAveragePE(Price *price, EPS *eps, PE *pe){ 
 
-    // 計算前4季發佈財報當天的PE
-    pe->last4QtheDayPE.Q1 = price->last4QTheDayPrice.Q1 / eps->last4QtureEPS.Q1;
-    pe->last4QtheDayPE.Q2 = price->last4QTheDayPrice.Q2 / eps->last4QtureEPS.Q2;
-    pe->last4QtheDayPE.Q3 = price->last4QTheDayPrice.Q3 / eps->last4QtureEPS.Q3;
-    pe->last4QtheDayPE.Q4 = price->last4QTheDayPrice.Q4 / eps->last4QtureEPS.Q4;
+    float sum = 0.0f;
+    int count = 0;
+
+    if (eps->last4QtureEPS.Q1 != 0.0f) { pe->last4QtheDayPE.Q1 = price->last4QTheDayPrice.Q1 / eps->last4QtureEPS.Q1; sum += pe->last4QtheDayPE.Q1; count++; } else { pe->last4QtheDayPE.Q1 = 0.0f; }
+    if (eps->last4QtureEPS.Q2 != 0.0f) { pe->last4QtheDayPE.Q2 = price->last4QTheDayPrice.Q2 / eps->last4QtureEPS.Q2; sum += pe->last4QtheDayPE.Q2; count++; } else { pe->last4QtheDayPE.Q2 = 0.0f; }
+    if (eps->last4QtureEPS.Q3 != 0.0f) { pe->last4QtheDayPE.Q3 = price->last4QTheDayPrice.Q3 / eps->last4QtureEPS.Q3; sum += pe->last4QtheDayPE.Q3; count++; } else { pe->last4QtheDayPE.Q3 = 0.0f; }
+    if (eps->last4QtureEPS.Q4 != 0.0f) { pe->last4QtheDayPE.Q4 = price->last4QTheDayPrice.Q4 / eps->last4QtureEPS.Q4; sum += pe->last4QtheDayPE.Q4; count++; } else { pe->last4QtheDayPE.Q4 = 0.0f; }
  
-     // 計算前4季發佈財報當天PE的平均值
-     pe->last4QtheDayPE.QAverage = 
-     (  pe->last4QtheDayPE.Q1 
-        +pe->last4QtheDayPE.Q2
-        +pe->last4QtheDayPE.Q3
-        +pe->last4QtheDayPE.Q4 ) / 4;
+    if (count > 0) pe->last4QtheDayPE.QAverage = sum / (float)count; else pe->last4QtheDayPE.QAverage = 0.0f;
  
     return pe->last4QtheDayPE.QAverage; 
 } 
@@ -279,18 +278,15 @@ float lastFourQuartersTheDayForwardAveragePE(Price *price, EPS *eps, PE *pe){
  */ 
 float lastFourQuartersAfterDayForwardAveragePE(Price *price, EPS *eps, PE *pe){ 
 
-    // 計算前4季發佈財報當天的PE
-    pe->last4QafterDayPE.Q1 = price->last4QAfterDayPrice.Q1 / eps->last4QtureEPS.Q1;
-    pe->last4QafterDayPE.Q2 = price->last4QAfterDayPrice.Q2 / eps->last4QtureEPS.Q2;
-    pe->last4QafterDayPE.Q3 = price->last4QAfterDayPrice.Q3 / eps->last4QtureEPS.Q3;
-    pe->last4QafterDayPE.Q4 = price->last4QAfterDayPrice.Q4 / eps->last4QtureEPS.Q4;
+    float sum = 0.0f;
+    int count = 0;
+
+    if (eps->last4QtureEPS.Q1 != 0.0f) { pe->last4QafterDayPE.Q1 = price->last4QAfterDayPrice.Q1 / eps->last4QtureEPS.Q1; sum += pe->last4QafterDayPE.Q1; count++; } else { pe->last4QafterDayPE.Q1 = 0.0f; }
+    if (eps->last4QtureEPS.Q2 != 0.0f) { pe->last4QafterDayPE.Q2 = price->last4QAfterDayPrice.Q2 / eps->last4QtureEPS.Q2; sum += pe->last4QafterDayPE.Q2; count++; } else { pe->last4QafterDayPE.Q2 = 0.0f; }
+    if (eps->last4QtureEPS.Q3 != 0.0f) { pe->last4QafterDayPE.Q3 = price->last4QAfterDayPrice.Q3 / eps->last4QtureEPS.Q3; sum += pe->last4QafterDayPE.Q3; count++; } else { pe->last4QafterDayPE.Q3 = 0.0f; }
+    if (eps->last4QtureEPS.Q4 != 0.0f) { pe->last4QafterDayPE.Q4 = price->last4QAfterDayPrice.Q4 / eps->last4QtureEPS.Q4; sum += pe->last4QafterDayPE.Q4; count++; } else { pe->last4QafterDayPE.Q4 = 0.0f; }
  
-     // 計算前4季發佈財報當天PE的平均值
-     pe->last4QafterDayPE.QAverage = 
-     (  pe->last4QafterDayPE.Q1 
-        +pe->last4QafterDayPE.Q2
-        +pe->last4QafterDayPE.Q3
-        +pe->last4QafterDayPE.Q4 ) / 4;
+    if (count > 0) pe->last4QafterDayPE.QAverage = sum / (float)count; else pe->last4QafterDayPE.QAverage = 0.0f;
  
     return pe->last4QafterDayPE.QAverage; 
 }
@@ -303,18 +299,15 @@ float lastFourQuartersAfterDayForwardAveragePE(Price *price, EPS *eps, PE *pe){
  */ 
 float lastFourQuartersPercentagDiffAverageEPS(EPS *eps, Others *others){ 
 
-    // 計算前4季的EPS差值百分比
-    others->last4QpercenDiff.Q1 = ((eps->last4QtureEPS.Q1) - (eps->last4QforecastEPS.Q1)) / eps->last4QforecastEPS.Q1;
-    others->last4QpercenDiff.Q2 = (eps->last4QtureEPS.Q2 - eps->last4QforecastEPS.Q2) / eps->last4QforecastEPS.Q2;
-    others->last4QpercenDiff.Q3 = (eps->last4QtureEPS.Q3 - eps->last4QforecastEPS.Q3) / eps->last4QforecastEPS.Q3;
-    others->last4QpercenDiff.Q4 = (eps->last4QtureEPS.Q4 - eps->last4QforecastEPS.Q4) / eps->last4QforecastEPS.Q4;
+    float sum = 0.0f;
+    int count = 0;
+
+    if (eps->last4QforecastEPS.Q1 != 0.0f) { others->last4QpercenDiff.Q1 = (eps->last4QtureEPS.Q1 - eps->last4QforecastEPS.Q1) / eps->last4QforecastEPS.Q1; sum += others->last4QpercenDiff.Q1; count++; } else { others->last4QpercenDiff.Q1 = 0.0f; }
+    if (eps->last4QforecastEPS.Q2 != 0.0f) { others->last4QpercenDiff.Q2 = (eps->last4QtureEPS.Q2 - eps->last4QforecastEPS.Q2) / eps->last4QforecastEPS.Q2; sum += others->last4QpercenDiff.Q2; count++; } else { others->last4QpercenDiff.Q2 = 0.0f; }
+    if (eps->last4QforecastEPS.Q3 != 0.0f) { others->last4QpercenDiff.Q3 = (eps->last4QtureEPS.Q3 - eps->last4QforecastEPS.Q3) / eps->last4QforecastEPS.Q3; sum += others->last4QpercenDiff.Q3; count++; } else { others->last4QpercenDiff.Q3 = 0.0f; }
+    if (eps->last4QforecastEPS.Q4 != 0.0f) { others->last4QpercenDiff.Q4 = (eps->last4QtureEPS.Q4 - eps->last4QforecastEPS.Q4) / eps->last4QforecastEPS.Q4; sum += others->last4QpercenDiff.Q4; count++; } else { others->last4QpercenDiff.Q4 = 0.0f; }
  
-     // 計算前4季發佈財報當天PE的平均值
-     others->last4QpercenDiff.QAverage = 
-     (  others->last4QpercenDiff.Q1 
-        + others->last4QpercenDiff.Q2
-        + others->last4QpercenDiff.Q3
-        + others->last4QpercenDiff.Q4 ) / 4;
+    if (count > 0) others->last4QpercenDiff.QAverage = sum / (float)count; else others->last4QpercenDiff.QAverage = 0.0f;
  
     return others->last4QpercenDiff.QAverage; 
 } 
@@ -393,14 +386,14 @@ float profitPercentage(float CurrentPrice ,float ForwardPrice){
     return ProfitPercentage;
 }
 /*
-* 比较函数 compar 是一个用户定义的函数，用于定义数组元素的排序规则。它接受两个参数，这两个参数都是指向待比较元素的指针。该函数返回一个整数值，表示两个元素的大小关系：
-*
-* 如果返回值小于 0，则表示第一个元素应该排在第二个元素之前。
-* 如果返回值等于 0，则表示两个元素相等，顺序不变。
-* 如果返回值大于 0，则表示第一个元素应该排在第二个元素之后。
+* 比较函数 compar -> 改為 float 比較
 */
-int compare(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
+int compare_float(const void *a, const void *b) {
+    float fa = *(const float*)a;
+    float fb = *(const float*)b;
+    if (fa < fb) return -1;
+    if (fa > fb) return 1;
+    return 0;
 }
  
  
@@ -435,7 +428,6 @@ int main() {
     printf("請輸入文件名(試算日期): ");
     scanf("%s", filename);
     // 打開文件，如果文件不存在則創建
-    fp = fopen(filename, "w");
     fp = fopen(filename, "a");
     // 檢查文件是否成功打開
     if(fp == NULL){
@@ -512,7 +504,7 @@ int main() {
             strcpy(stockName, "士電");
             CurrentPrice = 238.5;
             NextQdate = 20240802;
-            initInput(TW3231);
+            initInput(TW1503);
         }
         else if(j == 11){
             strcpy(stockName, "美時製藥");
@@ -523,7 +515,7 @@ int main() {
         else
         {
             printf("Done!\r\n");
-            while(1);
+            break;
         }
 
         initPrice(&myPrice); 
@@ -564,7 +556,7 @@ int main() {
         orderPrice[1] = nqtdPrice;
         orderPrice[2] = nqadmaxPrice;
         orderPrice[3] = nqadPrice;
-        qsort(orderPrice, numberPrice, sizeof(float), compare);
+        qsort(orderPrice, numberPrice, sizeof(float), compare_float);
 
         orderPercentage[0] = profitPercentage(CurrentPrice, orderPrice[0]);
         orderPercentage[3] = profitPercentage(CurrentPrice, orderPrice[3]);
